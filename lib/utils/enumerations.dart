@@ -1,0 +1,1 @@
+enum FilterType { all, pending, recent, completed, failed }
