@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:simple_moments/utils/colors.dart';
 import 'package:simple_moments/utils/dimensions.dart';
 import 'package:simple_moments/utils/global_assets.dart';
 import 'package:simple_moments/utils/global_strings.dart';
@@ -16,31 +17,45 @@ class BottomNavWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(
-          top: spacingPadding3,
-          left: spacingPadding6,
-          right: spacingPadding6),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(30),
-        boxShadow: [
-          BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
-              spreadRadius: 13,
-              blurRadius: 7,
-              offset: const Offset(0, 2))
-        ],
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          BottomNavItem(itemName: home, index: 0, icon: homeIcon),
-          globalGap(10),
-          BottomNavItem(itemName: profile, index: 1, icon: profileIcon),
-        ],
-      ),
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          width: deviceWidth,
+          padding: EdgeInsets.only(
+              top: spacingPadding5,
+              left: spacingPadding6,
+              right: spacingPadding6,
+              bottom: spacingPadding2),
+          decoration: const BoxDecoration(color: kBottomNav),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              BottomNavItem(itemName: moments, index: 0, icon: homeIcon),
+              globalGap(10),
+              BottomNavItem(itemName: profile, index: 1, icon: profileIcon),
+            ],
+          ),
+        ),
+        Positioned(
+          left: 0,
+          right: 0,
+          bottom: spacingPadding9,
+          child: GestureDetector(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                    padding: EdgeInsets.all(spacingPadding4),
+                    decoration: BoxDecoration(
+                        color: kPrimaryBlue, borderRadius: BorderRadius.circular(100)),
+                    child: SvgPicture.asset(camera)),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -84,7 +99,7 @@ class _BottomNavItemState extends State<BottomNavItem> {
                         fontSize: 12,
                         color: widget.index == value
                             ? Colors.white
-                            : Colors.black54.withAlpha(100)),
+                            : Colors.white.withAlpha(100)),
                   )
                 ],
               ),

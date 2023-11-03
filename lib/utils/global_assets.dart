@@ -13,3 +13,5 @@ String capture = 'capture'.svg;
 String view = 'view'.svg;
 String merge = 'merge'.svg;
 String google = 'google'.svg;
+String empty = 'empty'.svg;
+String camera = 'camera'.svg;

@@ -78,9 +78,7 @@ class AuthServiceImp extends AuthService {
     //         token: right.data['data']['accessToken']);
     //   }
     // });
-
-    // globalNavigateUntil(route: Routes.finishRegistration);
-    // globalNavigateUntil(route: Routes.createPasswordScreen);
+    if(otp.length == 6) globalNavigateUntil(route: Routes.domain);
   }
 
   @override

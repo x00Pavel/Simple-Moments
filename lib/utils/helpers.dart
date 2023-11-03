@@ -27,7 +27,7 @@ PinTheme pinTheme() {
   return PinTheme(
     width: 56,
     height: 56,
-    textStyle: regularText(fontSize: 16, color: Colors.black),
+    textStyle: regularText(fontSize: 16, color: Colors.white),
     decoration: BoxDecoration(
         border: Border.all(color: kTextFieldStroke),
         borderRadius: BorderRadius.circular(8)),

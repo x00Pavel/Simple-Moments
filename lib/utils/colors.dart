@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 const kPrimaryBlue = Color(0xFF327BE5);
 const kPrimaryDark = Color(0xFF0F1215);
+const kBottomNav = Color(0xFF191F24);
 const kPink = Color(0xFFF780AB);
 const Color kTextFieldStroke = Color(0xffE4E7EC);
 const kTextColor = Color(0xFF565758);
