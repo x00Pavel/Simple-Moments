@@ -53,8 +53,8 @@ class _OnboardScreenState extends State<OnboardScreen> {
                   ),
                   pageCount == 2
                       ? GestureDetector(
-                          onTap: () =>
-                              globalNavigateUntil(route: Routes.getStartedScreen),
+                          onTap: () => globalNavigateUntil(
+                              route: Routes.getStartedScreen),
                           child: Container(
                             padding: EdgeInsets.symmetric(
                                 horizontal: spacingPadding4,
@@ -67,9 +67,17 @@ class _OnboardScreenState extends State<OnboardScreen> {
                                     color: kPrimaryDark, fontSize: 16)),
                           ),
                         )
-                      : Text('Skip',
-                          style:
-                              semiBoldText(color: Colors.white, fontSize: 16))
+                      : GestureDetector(
+                          onTap: () => globalNavigateTo(
+                              route: Routes.getStartedScreen),
+                          child: Container(
+                            color: Colors.transparent,
+                            padding: EdgeInsets.all(spacingPadding2),
+                            child: Text('Skip',
+                                style: semiBoldText(
+                                    color: Colors.white, fontSize: 16)),
+                          ),
+                        )
                 ],
               ),
             )

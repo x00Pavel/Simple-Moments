@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:simple_moments/utils/colors.dart';
 import 'package:simple_moments/utils/dimensions.dart';
@@ -25,7 +24,7 @@ class GlobalSwitch extends StatelessWidget {
           left: spacingPadding1,
         ),
         decoration: BoxDecoration(
-            color: isOpened ? Colors.green : kTextColor.withAlpha(100),
+            color: isOpened ? kPrimaryBlue : kTextColor.withAlpha(100),
             borderRadius: BorderRadius.circular(spacingPadding20)),
         child: isOpened
             ? Container(

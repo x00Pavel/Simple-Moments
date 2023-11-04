@@ -15,3 +15,4 @@ String merge = 'merge'.svg;
 String google = 'google'.svg;
 String empty = 'empty'.svg;
 String camera = 'camera'.svg;
+String playButton = 'play_button'.svg;

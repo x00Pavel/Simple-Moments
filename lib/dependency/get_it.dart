@@ -8,6 +8,8 @@ import 'package:simple_moments/ui/auth/auth_cubit.dart';
 import 'package:simple_moments/ui/auth/auth_service.dart';
 import 'package:simple_moments/ui/nav_screens/home/home_cubit.dart';
 import 'package:simple_moments/ui/nav_screens/home/home_service.dart';
+import 'package:simple_moments/ui/nav_screens/profile/profile_cubit.dart';
+import 'package:simple_moments/ui/nav_screens/profile/profile_service.dart';
 
 import 'navigation/navigation_service.dart';
 
@@ -43,11 +45,17 @@ Future initDependencies(AppConfig appConfig) async {
   getItInstance.registerLazySingleton<HomeServiceImp>(
       () => HomeServiceImp(serviceHelpersImp: getItInstance()));
 
+  getItInstance.registerLazySingleton<ProfileServiceImp>(
+      () => ProfileServiceImp(serviceHelpersImp: getItInstance()));
+
   // Cubits
   getItInstance
       .registerFactory(() => AuthCubit(authServiceImp: getItInstance()));
 
   getItInstance
       .registerFactory(() => HomeCubit(homeServiceImp: getItInstance()));
+
+  getItInstance
+      .registerFactory(() => ProfileCubit(profileServiceImp: getItInstance()));
 
 }

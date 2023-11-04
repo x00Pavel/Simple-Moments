@@ -5,23 +5,30 @@ import 'home_service.dart';
 
 class HomeState {
   List<Moment> moments;
+  bool isLoading;
 
-  HomeState({required this.moments});
+  HomeState({required this.moments, required this.isLoading});
 }
 
-HomeState _reset = HomeState(moments: []);
+HomeState _reset = HomeState(moments: [], isLoading: false);
 
 class HomeCubit extends Cubit<HomeState> {
   HomeServiceImp homeServiceImp;
 
   HomeCubit({required this.homeServiceImp}) : super(_reset);
 
-  void _emitState() => emit(HomeState(moments: state.moments));
+  void _emitState() =>
+      emit(HomeState(moments: state.moments, isLoading: state.isLoading));
 
   void resetState() => emit(_reset);
 
   void getMoments() {
-    state.moments = demoMoments;
+    state.isLoading = true;
     _emitState();
+    Future.delayed(const Duration(seconds: 5), () {
+      state.isLoading = false;
+      state.moments = demoMoments;
+      _emitState();
+    });
   }
 }

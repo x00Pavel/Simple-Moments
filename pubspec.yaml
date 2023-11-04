@@ -60,6 +60,12 @@ dependencies:
   # For spacing
   gap: ^3.0.1
 
+  # shimmer effect
+  fade_shimmer: ^2.2.0
+
+  # Load and Catch Image
+  cached_network_image: ^3.2.3
+
   # Pager indicator
   smooth_page_indicator: ^1.1.0
 
