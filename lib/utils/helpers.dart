@@ -40,7 +40,7 @@ void checkStatus() async {
       if (userData.isNotEmpty) {
         globalNavigateTo(route: Routes.domain);
       } else {
-        globalNavigateUntil(route: Routes.domain);
+        globalNavigateUntil(route: Routes.onBoardScreen);
       }
     });
   } catch (_) {}
