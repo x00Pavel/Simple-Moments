@@ -8,13 +8,13 @@ class AppConfig {
 }
 
 AppConfig devMode = AppConfig(
-  appName: 'Simple moments(Dev)',
+  appName: 'Simplmet(Dev)',
   baseUrl: 'https://dadofoods.herokuapp.com/api/v1',
   isDev: true,
 );
 
 AppConfig prodMode = AppConfig(
-  appName: 'Simple moments',
+  appName: 'Simplmet',
   baseUrl: 'https://api.dado.ng/api/v1',
   isDev: false,
 );

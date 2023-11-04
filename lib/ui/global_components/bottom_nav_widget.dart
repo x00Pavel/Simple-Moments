@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:simple_moments/dependency/navigation/global_router_exports.dart';
+import 'package:simple_moments/dependency/navigation/navigator_routes.dart';
+import 'package:simple_moments/ui/nav_screens/home/home_cubit.dart';
 import 'package:simple_moments/utils/colors.dart';
 import 'package:simple_moments/utils/dimensions.dart';
 import 'package:simple_moments/utils/global_assets.dart';
@@ -43,13 +47,15 @@ class BottomNavWidget extends StatelessWidget {
           right: 0,
           bottom: spacingPadding9,
           child: GestureDetector(
+            onTap: () => context.read<HomeCubit>().captureMoment(),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
                     padding: EdgeInsets.all(spacingPadding4),
                     decoration: BoxDecoration(
-                        color: kPrimaryBlue, borderRadius: BorderRadius.circular(100)),
+                        color: kPrimaryBlue,
+                        borderRadius: BorderRadius.circular(100)),
                     child: SvgPicture.asset(camera)),
               ],
             ),

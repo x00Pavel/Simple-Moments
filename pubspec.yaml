@@ -78,6 +78,13 @@ dependencies:
   # Fade in animations
   flutter_fadein: ^2.0.0
 
+  # Handle permission
+  permission_handler: ^11.0.1
+
+  # Camera
+  camera: ^0.10.5+5
+  video_player: ^2.8.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

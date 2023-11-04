@@ -1,5 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:simple_moments/database/moments_model/moments_model.dart';
+import 'package:simple_moments/dependency/navigation/global_router_exports.dart';
+import 'package:simple_moments/dependency/navigation/navigator_routes.dart';
 
 import 'home_service.dart';
 
@@ -30,5 +33,38 @@ class HomeCubit extends Cubit<HomeState> {
       state.moments = demoMoments;
       _emitState();
     });
+  }
+
+  void captureMoment({bool isFromAllowScreen = false}) async {
+    var status = await Permission.camera.status;
+
+    if (status.isGranted) {
+      globalNavigateTo(route: Routes.cameraMoments);
+      return;
+    }
+
+    if (status.isPermanentlyDenied) {
+      isFromAllowScreen
+          ? globalReplaceWith(route: Routes.cameraDenied)
+          : globalNavigateTo(route: Routes.cameraDenied);
+      return;
+    }
+    if (status.isLimited || status.isDenied) {
+      globalNavigateTo(route: Routes.allowCamera);
+      return;
+    }
+  }
+
+  void allowCameraPermission() async {
+    await Permission.camera
+        .request()
+        .then((value) => captureMoment(isFromAllowScreen: true));
+  }
+
+  Future<void> enableCameraFromSettings() async {
+    var status = await Permission.camera.status;
+    if (status.isPermanentlyDenied || status.isDenied) {
+      openAppSettings();
+    }
   }
 }

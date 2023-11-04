@@ -9,7 +9,10 @@ class Routes {
   static const String otpScreen = '/otpScreen';
   static const String getStartedScreen = '/getStartedScreen';
 
-  // Main
 
+  // Main
+  static const String cameraMoments = '/cameraMoments';
+  static const String allowCamera = '/allowCamera';
+  static const String cameraDenied = 'cCameraDenied';
 
 }

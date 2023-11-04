@@ -62,7 +62,7 @@ class Profile extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Wana stop capturing?',
+                    Text('Wanna stop capturing?',
                         style: regularText(color: Colors.white.withAlpha(100), fontSize: 16)),
                     GestureDetector(
 
