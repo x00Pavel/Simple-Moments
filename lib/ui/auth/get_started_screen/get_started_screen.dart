@@ -1,6 +1,8 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:simple_moments/dependency/navigation/global_router_exports.dart';
 import 'package:simple_moments/dependency/navigation/navigator_routes.dart';
+import 'package:simple_moments/ui/auth/auth_cubit.dart';
 import 'package:simple_moments/ui/global_components/global_button.dart';
 import 'package:simple_moments/utils/colors.dart';
 import 'package:simple_moments/utils/dimensions.dart';
@@ -48,6 +50,7 @@ class GetStartedScreen extends StatelessWidget {
                     children: [
                       GlobalButton(
                           fillColor: kWhite,
+                          onTap: () => context.read<AuthCubit>().googleAuth(),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [

@@ -52,6 +52,8 @@ class AuthCubit extends Cubit<AuthState> {
     _emitState();
   }
 
+  void googleAuth() async => authServiceImp.googleAuth();
+
   void validateOtp({required String otp}) async {
     authServiceImp.validateOtp(token: state.token, otp: otp);
   }
@@ -65,7 +67,6 @@ class AuthCubit extends Cubit<AuthState> {
       dailCode: state.phoneNumber.substring(0, 4),
     );
   }
-
 
   void collectPassword({
     String? password,
