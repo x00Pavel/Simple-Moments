@@ -1,10 +1,13 @@
+import 'dart:async';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:simple_moments/dependency/navigation/global_router_exports.dart';
 import 'package:simple_moments/utils/colors.dart';
-import 'package:simple_moments/utils/dimensions.dart';
-import 'package:simple_moments/utils/global_assets.dart';
+
+import 'components/moments_back_button.dart';
+import 'components/moments_controls.dart';
+import 'components/moments_counter.dart';
 
 class CameraMoments extends StatefulWidget {
   const CameraMoments({super.key});
@@ -17,6 +20,36 @@ class _CameraMomentsState extends State<CameraMoments>
     with WidgetsBindingObserver, TickerProviderStateMixin {
   CameraController? _controller;
   List<CameraDescription> cameras = [];
+  bool isFrontCamera = true;
+  bool isRecording = false;
+
+  late Timer _timer;
+  int _start = 5;
+
+  void _startTimer() {
+    const oneSec = Duration(seconds: 1);
+    _timer = Timer.periodic(
+      oneSec,
+      (Timer timer) {
+        if (_start == 0) {
+          setState(() {
+            timer.cancel();
+          });
+        } else {
+          setState(() {
+            _start--;
+          });
+        }
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    _stopRecording();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -33,9 +66,42 @@ class _CameraMomentsState extends State<CameraMoments>
         return;
       }
       setState(() {});
-    }).catchError((error) {
-      print(error);
     });
+  }
+
+  void switchCamera() async {
+    _controller =
+        CameraController(cameras[isFrontCamera ? 0 : 1], ResolutionPreset.max);
+    _controller!.initialize().then((value) {
+      if (!mounted) {
+        return;
+      }
+      setState(() => isFrontCamera = !isFrontCamera);
+    });
+  }
+
+  Future<void> startRecording() async {
+    if (_controller == null ||
+        !_controller!.value.isInitialized ||
+        _controller!.value.isRecordingVideo) {
+      return;
+    }
+
+    try {
+      await _controller!.startVideoRecording();
+      _controller!.enableAudio;
+      setState(() => isRecording = true);
+      _startTimer();
+      Future.delayed(const Duration(seconds: 5), () => _stopRecording());
+    } on CameraException catch (_) {}
+  }
+
+  Future<void> _stopRecording() async {
+    try {
+       _controller!.stopVideoRecording();
+       _controller!.dispose();
+      setState(() => isRecording = false);
+    } on CameraException catch (_) {}
   }
 
   @override
@@ -65,43 +131,14 @@ class _CameraMomentsState extends State<CameraMoments>
           )
         : Scaffold(
             body: Stack(
+              fit: StackFit.expand,
               children: [
-                Positioned.fill(child: CameraPreview(_controller!)),
-                Positioned(
-                  bottom: 30,
-                  left: 0,
-                  right: 0,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: spacingPadding4,
-                            vertical: spacingPadding3,
-                          ),
-                          decoration: const BoxDecoration(
-                              color: Colors.black54,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(20),
-                                bottomLeft: Radius.circular(20),
-                              )),
-                          child:
-                              SvgPicture.asset(stop, height: spacingPadding7)),
-                      Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: spacingPadding4,
-                            vertical: spacingPadding4,
-                          ),
-                          decoration: const BoxDecoration(
-                              color: Colors.redAccent,
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(20),
-                                bottomRight: Radius.circular(20),
-                              )),
-                          child: SvgPicture.asset(cancel)),
-                    ],
-                  ),
+                CameraPreview(_controller!),
+                 MomentsBackButton(stopRecording: () => _stopRecording(),),
+                if (isRecording) MomentsCounter(start: _start),
+                MomentsControls(
+                  startRecording: () => startRecording(),
+                  switchCamera: () => switchCamera(),
                 )
               ],
             ),

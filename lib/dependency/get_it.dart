@@ -6,6 +6,7 @@ import 'package:simple_moments/api_service/service.dart';
 import 'package:simple_moments/database/database.dart';
 import 'package:simple_moments/ui/auth/auth_cubit.dart';
 import 'package:simple_moments/ui/auth/auth_service.dart';
+import 'package:simple_moments/ui/nav_screens/camera_moments/moments_cubit.dart';
 import 'package:simple_moments/ui/nav_screens/home/home_cubit.dart';
 import 'package:simple_moments/ui/nav_screens/home/home_service.dart';
 import 'package:simple_moments/ui/nav_screens/profile/profile_cubit.dart';
@@ -58,4 +59,5 @@ Future initDependencies(AppConfig appConfig) async {
   getItInstance
       .registerFactory(() => ProfileCubit(profileServiceImp: getItInstance()));
 
+  getItInstance.registerFactory(() => MomentCubit());
 }

@@ -20,6 +20,7 @@ String playButton = 'play_button'.svg;
 String cameraAccess = 'camera_access'.svg;
 String cameraNoAccess = 'camera_no_access'.svg;
 String cancel = 'cancel'.svg;
+String alternateCam = 'alternateCam'.svg;
 
 String pause = 'pause'.svg;
 String play = 'play'.svg;
