@@ -17,12 +17,18 @@ class ListOfMoments extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
-        return ListView.builder(
-            padding: EdgeInsets.only(top: spacingPadding8),
-            itemCount: state.moments.length,
-            shrinkWrap: true,
-            itemBuilder: (context, index) =>
-                _MomentWidget(moment: state.moments[index]));
+        return Flexible(
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: ListView.builder(
+                padding: EdgeInsets.only(top: spacingPadding8),
+                itemCount: state.moments.length,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) =>
+                    _MomentWidget(moment: state.moments[index])),
+          ),
+        );
       },
     );
   }

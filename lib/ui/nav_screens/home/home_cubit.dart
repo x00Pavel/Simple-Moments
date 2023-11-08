@@ -36,34 +36,45 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   void captureMoment({bool isFromAllowScreen = false}) async {
-    var status = await Permission.camera.status;
+    var statusCamera = await Permission.camera.status;
+    var statusMic = await Permission.microphone.status;
 
-    if (status.isGranted) {
+    if (statusCamera.isGranted || statusMic.isGranted) {
       globalNavigateTo(route: Routes.cameraMoments);
       return;
     }
 
-    if (status.isPermanentlyDenied) {
+    if (statusCamera.isPermanentlyDenied || statusMic.isGranted) {
       isFromAllowScreen
           ? globalReplaceWith(route: Routes.cameraDenied)
           : globalNavigateTo(route: Routes.cameraDenied);
       return;
     }
-    if (status.isLimited || status.isDenied) {
+    if (statusCamera.isLimited ||
+        statusCamera.isDenied ||
+        statusMic.isLimited ||
+        statusMic.isDenied) {
       globalNavigateTo(route: Routes.allowCamera);
       return;
     }
   }
 
-  void allowCameraPermission() async {
-    await Permission.camera
+  void allowCameraPermission() async =>
+      await Permission.camera.request().then((value) => _allowMicPermission());
+
+  void _allowMicPermission() async {
+    await Permission.microphone
         .request()
         .then((value) => captureMoment(isFromAllowScreen: true));
   }
 
   Future<void> enableCameraFromSettings() async {
-    var status = await Permission.camera.status;
-    if (status.isPermanentlyDenied || status.isDenied) {
+    var statusCamera = await Permission.camera.status;
+    var statusMic = await Permission.microphone.status;
+    if (statusCamera.isPermanentlyDenied ||
+        statusCamera.isDenied ||
+        statusMic.isPermanentlyDenied ||
+        statusMic.isDenied) {
       openAppSettings();
     }
   }

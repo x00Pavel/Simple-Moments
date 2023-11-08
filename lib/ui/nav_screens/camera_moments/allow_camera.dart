@@ -40,7 +40,7 @@ class AllowCamera extends StatelessWidget {
                         color: Colors.white.withAlpha(100), fontSize: 15)),
                 globalGap(spacingPadding5),
                 GlobalButton(
-                  btnText: allowCamera,
+                  btnText: allowCameraMic,
                   onTap: () =>
                       context.read<HomeCubit>().allowCameraPermission(),
                 ),

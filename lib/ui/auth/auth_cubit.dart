@@ -1,6 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:simple_moments/dependency/navigation/global_router_exports.dart';
-import 'package:simple_moments/dependency/navigation/navigator_routes.dart';
 
 import 'auth_service.dart';
 
