@@ -89,7 +89,10 @@ dependencies:
   animated_flip_counter: ^0.2.6
 
   # Google Auth
-  google_sign_in: ^6.1.5
+  google_sign_in: ^6.1.6
+
+  # Firebase Auth
+  firebase_auth: ^4.13.0
 
 dev_dependencies:
   flutter_test:

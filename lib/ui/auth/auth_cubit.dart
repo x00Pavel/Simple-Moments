@@ -46,7 +46,7 @@ class AuthCubit extends Cubit<AuthState> {
   void authenticate(
       {required String phoneNumber, required String dailCode}) async {
     state.phoneNumber = dailCode + phoneNumber;
-    authServiceImp.authenticate(phoneNumber: phoneNumber, dailCode: dailCode);
+    authServiceImp.phoneAuth(phoneNumber: phoneNumber, dailCode: dailCode);
     _emitState();
   }
 

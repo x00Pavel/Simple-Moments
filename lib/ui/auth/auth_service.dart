@@ -5,11 +5,12 @@ import 'package:simple_moments/database/database.dart';
 import 'package:simple_moments/dependency/navigation/global_router_exports.dart';
 import 'package:simple_moments/utils/helpers.dart';
 import 'package:simple_moments/utils/loader_dialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../dependency/navigation/navigator_routes.dart';
 
 abstract class AuthService {
-  Future<void> authenticate({
+  Future<void> phoneAuth({
     required String phoneNumber,
     required String dailCode,
   });
@@ -36,10 +37,13 @@ class AuthServiceImp extends AuthService {
   @override
   Future<void> googleAuth() async {
     showLoaderDialog();
-    final googleSignIn = GoogleSignIn(scopes: [
-      'email',
-      'https://www.googleapis.com/auth/contacts.readonly',
-    ]);
+    final googleSignIn = GoogleSignIn(
+        clientId:
+            '753034776950-oaermto4vgkg26i9qs0e4ha07orujooh.apps.googleusercontent.com',
+        scopes: [
+          'email',
+          'https://www.googleapis.com/auth/contacts.readonly',
+        ]);
     final googleUser = await googleSignIn.signIn();
 
     globalPop();
@@ -54,7 +58,7 @@ class AuthServiceImp extends AuthService {
           endPointUrl: '/auth/customer/send/otp',
           body: {'access_token': googleAuth.accessToken, 'provider': 'google'});
 
-      print(googleAuth.accessToken);
+      print('googleAuth.accessToken ${googleAuth.accessToken}');
 
       globalPop();
       response.fold((left) => globalToast('Sorry, an error occurred'), (right) {
@@ -69,29 +73,33 @@ class AuthServiceImp extends AuthService {
   }
 
   @override
-  Future<void> authenticate({
+  Future<void> phoneAuth({
     required String phoneNumber,
     required String dailCode,
   }) async {
-    globalNavigateTo(route: Routes.otpScreen);
 
-    // showLoaderDialog();
-    //
-    // var body = {
-    //   'phone': phoneNumber[0] == '0' ? phoneNumber : '0$phoneNumber',
-    //   'country_code': dailCode
-    // };
-    //
-    // var response = await serviceHelpersImp.post(
-    //     endPointUrl: '/auth/customer/send/otp', body: body);
-    //
-    // globalPop();
-    // response.fold((left) => globalToast('Sorry, an error occurred'), (right) {
-    //   if (right.statusCode == 200) {
-    //     globalToast(right.data['message']);
-    //     // globalNavigateUntil(route: Routes.login);
-    //   }
-    // });
+    FirebaseAuth auth = FirebaseAuth.instance;
+
+    await auth.verifyPhoneNumber(
+      phoneNumber: '$dailCode$phoneNumber',
+      timeout: const Duration(seconds: 60),
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        // ANDROID ONLY!
+        // Sign the user in (or link) with the auto-generated credential
+        await auth.signInWithCredential(credential);
+      },
+
+      verificationFailed: (FirebaseAuthException error) {
+        print('error $error');
+      },
+      codeSent: (String verificationId, int? forceResendingToken) {
+        print('verificationId $verificationId');
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {
+        print('verificationId $verificationId');
+      },
+    );
+
   }
 
   @override
