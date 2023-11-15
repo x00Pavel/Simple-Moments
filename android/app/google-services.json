@@ -12,7 +12,20 @@
           "package_name": "com.example.simple_moments"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "753034776950-ervbitv010vf5r36f58ss3lgd7ec20j9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.simple_moments",
+            "certificate_hash": "1d0ed22125469c85f6d1b7855749ba740f1d1a9c"
+          }
+        },
+        {
+          "client_id": "753034776950-b74pbd0dso9dinaquom8njog1sohqnc7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyB_xJQH_fhwiN7Chy_WXcx01OBH2UzK12I"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "753034776950-b74pbd0dso9dinaquom8njog1sohqnc7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "753034776950-oaermto4vgkg26i9qs0e4ha07orujooh.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.simpleMoments"
+              }
+            }
+          ]
         }
       }
     }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:simple_moments/api_service/service.dart';
 import 'package:simple_moments/database/database.dart';
@@ -8,9 +9,10 @@ import 'package:simple_moments/utils/loader_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../dependency/navigation/navigator_routes.dart';
+import 'auth_cubit.dart';
 
 abstract class AuthService {
-  Future<void> phoneAuth({
+  Future<String> phoneAuth({
     required String phoneNumber,
     required String dailCode,
   });
@@ -51,55 +53,56 @@ class AuthServiceImp extends AuthService {
     if (googleUser != null) {
       final googleAuth = await googleUser.authentication;
 
-      // ignore: use_build_context_synchronously
       showLoaderDialog();
 
-      var response = await serviceHelpersImp.post(
-          endPointUrl: '/auth/customer/send/otp',
-          body: {'access_token': googleAuth.accessToken, 'provider': 'google'});
+      if (googleAuth.accessToken != null) {
+        globalPop();
+        globalNavigateTo(route: Routes.domain);
+      }
 
-      print('googleAuth.accessToken ${googleAuth.accessToken}');
-
-      globalPop();
-      response.fold((left) => globalToast('Sorry, an error occurred'), (right) {
-        if (right.statusCode == 200) {
-          globalToast(right.data['message']);
-          // globalNavigateUntil(route: Routes.login);
-        }
-      });
+      // var response = await serviceHelpersImp.post(
+      //     endPointUrl: '/auth/customer/send/otp',
+      //     body: {'access_token': googleAuth.accessToken, 'provider': 'google'});
+      //
+      // print('googleAuth.accessToken ${googleAuth.accessToken}');
+      //
+      // globalPop();
+      // response.fold((left) => globalToast('Sorry, an error occurred'), (right) {
+      //   if (right.statusCode == 200) {
+      //     globalToast(right.data['message']);
+      //     // globalNavigateUntil(route: Routes.login);
+      //   }
+      // });
     } else {
       globalToast('An error occurred.');
     }
   }
 
   @override
-  Future<void> phoneAuth({
+  Future<String> phoneAuth({
     required String phoneNumber,
     required String dailCode,
   }) async {
-
     FirebaseAuth auth = FirebaseAuth.instance;
+    String verificationId = '';
 
     await auth.verifyPhoneNumber(
       phoneNumber: '$dailCode$phoneNumber',
       timeout: const Duration(seconds: 60),
-      verificationCompleted: (PhoneAuthCredential credential) async {
-        // ANDROID ONLY!
-        // Sign the user in (or link) with the auto-generated credential
-        await auth.signInWithCredential(credential);
-      },
-
+      verificationCompleted: (PhoneAuthCredential credential) async {},
       verificationFailed: (FirebaseAuthException error) {
         print('error $error');
+        globalToast('Error occurred, please try again.');
       },
       codeSent: (String verificationId, int? forceResendingToken) {
-        print('verificationId $verificationId');
+        buildContext.read<AuthCubit>().saveID(verificationId: verificationId);
+        globalNavigateTo(route: Routes.otpScreen);
       },
       codeAutoRetrievalTimeout: (String verificationId) {
-        print('verificationId $verificationId');
+        verificationId = verificationId;
       },
     );
-
+    return verificationId;
   }
 
   @override
@@ -107,22 +110,25 @@ class AuthServiceImp extends AuthService {
     required String otp,
     required String token,
   }) async {
-    // showLoaderDialog();
-    // var body = {'token': token, 'pin': otp};
-    //
-    // var response = await serviceHelpersImp.post(
-    //     endPointUrl: '/auth/customer/verify/otp', body: body);
-    //
-    // globalPop();
-    // response.fold((left) => globalToast('Sorry, an error occurred'),
-    //     (right) async {
-    //   if (right.statusCode == 200) {
-    //     globalToast(right.data['message']);
-    //     tempDatabaseImpl.saveUserToken(
-    //         token: right.data['data']['accessToken']);
-    //   }
-    // });
-    if (otp.length == 6) globalNavigateUntil(route: Routes.domain);
+    showLoaderDialog();
+    FirebaseAuth auth = FirebaseAuth.instance;
+    try {
+      await auth
+          .signInWithCredential(
+              PhoneAuthProvider.credential(verificationId: token, smsCode: otp))
+          .then((value) {
+        if (value.user != null) {
+          print('value.user!.uid ${value.user!.uid}');
+          globalNavigateTo(route: Routes.domain);
+          globalToast('Successfully logged in');
+        } else {
+          globalToast('An error in verification, please try again.');
+        }
+      });
+    } catch (e) {
+      globalPop();
+      globalToast('An error in verification, please try again.');
+    }
   }
 
   @override

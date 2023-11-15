@@ -15,9 +15,9 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
 
-  PushNotificationService()
-    ..createChannel()
-    ..setNotifications();
+  // PushNotificationService()
+  //   ..createChannel()
+  //   ..setNotifications();
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {

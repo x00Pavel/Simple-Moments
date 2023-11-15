@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:simple_moments/database/moments_model/moments_model.dart';
@@ -36,6 +38,10 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   void captureMoment({bool isFromAllowScreen = false}) async {
+    if (Platform.isIOS) {
+      globalNavigateTo(route: Routes.cameraMoments);
+      return;
+    }
     var statusCamera = await Permission.camera.status;
     var statusMic = await Permission.microphone.status;
 

@@ -63,6 +63,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '753034776950',
     projectId: 'simplmet',
     storageBucket: 'simplmet.appspot.com',
+    androidClientId: '753034776950-ervbitv010vf5r36f58ss3lgd7ec20j9.apps.googleusercontent.com',
+    iosClientId: '753034776950-oaermto4vgkg26i9qs0e4ha07orujooh.apps.googleusercontent.com',
     iosBundleId: 'com.example.simpleMoments',
   );
 }
