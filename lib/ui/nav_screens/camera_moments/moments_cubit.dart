@@ -1,101 +1,48 @@
-import 'dart:async';
-
-import 'package:camera/camera.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:simple_moments/dependency/navigation/navigator_routes.dart';
+import 'package:simple_moments/ui/nav_screens/home/home_service.dart';
+
+import 'moments_video_player.dart';
 
 class MomentState {
-  CameraController? controller;
-  List<CameraDescription> cameras = [];
-  bool isFrontCamera;
-  Timer? _timer;
-  int start;
+  String filePath;
 
-  MomentState({
-    required this.controller,
-    required this.cameras,
-    required this.isFrontCamera,
-    required Timer? timer,
-    required this.start,
-  }) : _timer = timer;
+  MomentState({required this.filePath});
 }
 
 MomentState _reset = MomentState(
-  controller: null,
-  cameras: [],
-  isFrontCamera: true,
-  timer: null,
-  start: 5,
+  filePath: '',
 );
 
 class MomentCubit extends Cubit<MomentState> {
-  MomentCubit() : super(_reset);
+  HomeServiceImp homeServiceImp;
+
+  MomentCubit({required this.homeServiceImp}) : super(_reset);
 
   void _emitState() => emit(MomentState(
-        controller: state.controller,
-        cameras: state.cameras,
-        isFrontCamera: state.isFrontCamera,
-        timer: state._timer,
-        start: state.start,
+        filePath: state.filePath,
       ));
 
   void resetState() => emit(_reset);
 
-  void initializeCamera() async {
-    state.cameras = await availableCameras();
-    state.controller = CameraController(state.cameras[1], ResolutionPreset.max);
-    state.controller!.initialize().then((value) => _emitState());
-  }
-
-  void switchCamera() async {
-    state.controller = CameraController(
-        state.cameras[state.isFrontCamera ? 0 : 1], ResolutionPreset.max);
-    state.controller!.initialize();
-    state.controller!.initialize().then((value) => _emitState());
-  }
-
-  Future<void> startRecording() async {
-    if (state.controller == null ||
-        !state.controller!.value.isInitialized ||
-        state.controller!.value.isRecordingVideo) {
-      return;
-    }
-
-    try {
-      await state.controller!.startVideoRecording();
-      Future.delayed(const Duration(seconds: 5), () {
-        stopRecording();
-        _startTimer();
-      });
-    } on CameraException catch (_) {}
-  }
-
-  Future<void> stopRecording() async {
-    if (state.controller == null ||
-        !state.controller!.value.isInitialized ||
-        state.controller!.value.isRecordingVideo) {
-      return;
-    }
-
-    try {
-      await state.controller!.stopVideoRecording();
-      if (state._timer != null) {
-        state._timer!.cancel();
-      }
-    } on CameraException catch (_) {}
-  }
-
-  void _startTimer() {
-    const oneSec = Duration(seconds: 1);
-    state._timer = Timer.periodic(
-      oneSec,
-      (Timer timer) {
-        if (state.start == 0) {
-          timer.cancel();
-        } else {
-          state.start--;
-        }
-      },
-    );
+  void saveVideo({required String filePath}) {
+    state.filePath = filePath;
     _emitState();
+    showModalBottomSheet(
+      context: buildContext,
+      isScrollControlled: true,
+      backgroundColor: Colors.black26,
+      barrierColor: Colors.black54,
+      builder: (context) => const MomentsVideoPlayer(),
+    );
+  }
+
+  void uploadMoment() {
+    homeServiceImp.uploadMoment(imagePath: state.filePath);
+  }
+
+  void getMoments() {
+    homeServiceImp.getMoments();
   }
 }

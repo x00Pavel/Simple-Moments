@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simple_moments/dependency/navigation/global_router_exports.dart';
+import 'package:simple_moments/ui/nav_screens/camera_moments/moments_cubit.dart';
 import 'package:simple_moments/utils/colors.dart';
 
 import 'components/moments_back_button.dart';
@@ -31,15 +33,7 @@ class _CameraMomentsState extends State<CameraMoments>
     _timer = Timer.periodic(
       oneSec,
       (Timer timer) {
-        if (_start == 0) {
-          setState(() {
-            timer.cancel();
-          });
-        } else {
-          setState(() {
-            _start--;
-          });
-        }
+        setState(() => _start--);
       },
     );
   }
@@ -98,10 +92,20 @@ class _CameraMomentsState extends State<CameraMoments>
 
   Future<void> _stopRecording() async {
     try {
-       _controller!.stopVideoRecording();
-       _controller!.dispose();
-      setState(() => isRecording = false);
-    } on CameraException catch (_) {}
+      await _controller!.stopVideoRecording().then((file) {
+        setState(() {
+          isRecording = false;
+          context.read<MomentCubit>().saveVideo(filePath: file.path);
+          _start = 5;
+          _timer.cancel();
+        });
+      });
+
+
+      // _controller!.dispose();
+    } on CameraException catch (_) {
+      print('CameraException: $_');
+    }
   }
 
   @override
@@ -134,9 +138,12 @@ class _CameraMomentsState extends State<CameraMoments>
               fit: StackFit.expand,
               children: [
                 CameraPreview(_controller!),
-                 MomentsBackButton(stopRecording: () => _stopRecording(),),
+                MomentsBackButton(
+                  stopRecording: () => _stopRecording(),
+                ),
                 if (isRecording) MomentsCounter(start: _start),
                 MomentsControls(
+                  isRecording: isRecording,
                   startRecording: () => startRecording(),
                   switchCamera: () => switchCamera(),
                 )

@@ -113,7 +113,8 @@ class _OtpScreenState extends State<OtpScreen> {
                               textAlign: TextAlign.center,
                               text: TextSpan(
                                   text: 'Enter the OTP sent to ',
-                                  style: regularText(color: kWhite.withAlpha(150)),
+                                  style:
+                                      regularText(color: kWhite.withAlpha(150)),
                                   children: [
                                     TextSpan(
                                         text: state.phoneNumber,
@@ -160,8 +161,7 @@ class _OtpScreenState extends State<OtpScreen> {
                                         padding: const EdgeInsets.all(4),
                                         child: Text('Resend OTP',
                                             style: regularText(
-                                                color: kWhite,
-                                                fontSize: 14)),
+                                                color: kWhite, fontSize: 14)),
                                       ),
                                     ),
                                   )
@@ -170,8 +170,7 @@ class _OtpScreenState extends State<OtpScreen> {
                                     children: [
                                       Text('Resend OTP  in ',
                                           style: regularText(
-                                              color:
-                                                  kWhite.withAlpha(150),
+                                              color: kWhite.withAlpha(150),
                                               fontSize: 14)),
                                       Text(
                                           '${duration.inMinutes.toString()}:${duration.inSeconds.toString()}',

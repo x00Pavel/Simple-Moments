@@ -31,6 +31,7 @@ class AllowCamera extends StatelessWidget {
                 SvgPicture.asset(cameraAccess),
                 globalGap(10),
                 Text(giveAccess,
+                    textAlign: TextAlign.center,
                     style: semiBoldText(color: Colors.white, fontSize: 22)),
                 globalGap(3),
                 Text(inOrder,

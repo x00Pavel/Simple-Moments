@@ -30,6 +30,7 @@ class HomeCubit extends Cubit<HomeState> {
   void getMoments() {
     state.isLoading = true;
     _emitState();
+    homeServiceImp.getMoments();
     Future.delayed(const Duration(seconds: 5), () {
       state.isLoading = false;
       state.moments = demoMoments;

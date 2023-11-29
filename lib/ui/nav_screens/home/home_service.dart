@@ -1,9 +1,19 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:dio/dio.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:simple_moments/api_service/service.dart';
+import 'package:simple_moments/dependency/navigation/navigator_routes.dart';
+import 'package:simple_moments/ui/nav_screens/camera_moments/moments_cubit.dart';
+import 'package:simple_moments/utils/loader_dialog.dart';
 
 abstract class HomeService {
-  Future<void> getMonthlySales();
+  Future<void> getMoments();
+
+  Future<void> uploadMoment({required String imagePath});
 }
 
 class HomeServiceImp extends HomeService {
@@ -12,7 +22,7 @@ class HomeServiceImp extends HomeService {
   HomeServiceImp({required this.serviceHelpersImp});
 
   @override
-  Future<void> getMonthlySales() async {
+  Future<void> getMoments() async {
     // var response = await serviceHelpersImp.post(
     //     endPointUrl: '/auth/customer/send/otp', body: body);
     //
@@ -23,5 +33,29 @@ class HomeServiceImp extends HomeService {
     //     // globalNavigateUntil(route: Routes.login);
     //   }
     // });
+  }
+
+  @override
+  Future<void> uploadMoment({required String imagePath}) async {
+    showLoaderDialog();
+
+    var formData = FormData.fromMap({
+      'avatar': await MultipartFile.fromFile(imagePath,
+          filename: 'image.name', contentType: MediaType('video', 'mp4'))
+    });
+
+    var response = await serviceHelpersImp.postFormData(
+        endPointUrl: '/userinfo/', formData: formData);
+
+    globalPop();
+
+    response.fold((left) => null, (right) {
+      if (right.statusCode == 200) {
+        globalPop();
+        globalPop();
+        buildContext.read<MomentCubit>().getMoments();
+        // tempDatabaseImpl.saveUserData(userData: jsonEncode(right.data['data']));
+      }
+    });
   }
 }

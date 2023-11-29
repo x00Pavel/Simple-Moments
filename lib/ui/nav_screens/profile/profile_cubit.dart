@@ -1,9 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:simple_moments/database/database.dart';
+import 'package:simple_moments/database/user_model/user_model.dart';
 
 import 'profile_service.dart';
 
 class ProfileState {
   bool isOpened;
+  ProfileModel? profileModel;
+
   ProfileState({required this.isOpened});
 }
 
@@ -11,8 +15,11 @@ ProfileState _reset = ProfileState(isOpened: false);
 
 class ProfileCubit extends Cubit<ProfileState> {
   ProfileServiceImp profileServiceImp;
+  TempDatabaseImpl tempDatabaseImpl;
 
-  ProfileCubit({required this.profileServiceImp}) : super(_reset);
+  ProfileCubit(
+      {required this.profileServiceImp, required this.tempDatabaseImpl})
+      : super(_reset);
 
   void _emitState() => emit(ProfileState(isOpened: state.isOpened));
 
@@ -21,5 +28,23 @@ class ProfileCubit extends Cubit<ProfileState> {
   void toggleSwitch() {
     state.isOpened = !state.isOpened;
     _emitState();
+  }
+
+  Future<void> getProfile() async {
+    tempDatabaseImpl.getUserData().then((userData) {
+      if (userData.isNotEmpty) {
+        state.profileModel = profileModelFromJson(userData);
+        _emitState();
+      }
+    });
+
+    await profileServiceImp.getProfile().whenComplete(() {
+      tempDatabaseImpl.getUserData().then((userData) {
+        if (userData.isNotEmpty) {
+          state.profileModel = profileModelFromJson(userData);
+          _emitState();
+        }
+      });
+    });
   }
 }

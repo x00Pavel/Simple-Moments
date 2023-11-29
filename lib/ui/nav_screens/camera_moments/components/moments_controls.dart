@@ -8,9 +8,13 @@ import 'package:simple_moments/utils/global_assets.dart';
 
 class MomentsControls extends StatelessWidget {
   const MomentsControls(
-      {super.key, required this.startRecording, required this.switchCamera});
+      {super.key,
+      required this.isRecording,
+      required this.startRecording,
+      required this.switchCamera});
 
   final Function() startRecording, switchCamera;
+  final bool isRecording;
 
   @override
   Widget build(BuildContext context) {
@@ -29,29 +33,36 @@ class MomentsControls extends StatelessWidget {
                   horizontal: spacingPadding4,
                   vertical: spacingPadding3,
                 ),
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                     color: Colors.black54,
                     borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      bottomLeft: Radius.circular(20),
+                      topLeft: const Radius.circular(20),
+                      topRight:
+                          isRecording ? const Radius.circular(20) : Radius.zero,
+                      bottomRight:
+                          isRecording ? const Radius.circular(20) : Radius.zero,
+                      bottomLeft: const Radius.circular(20),
                     )),
-                child: SvgPicture.asset(stop, height: spacingPadding7)),
+                child: SvgPicture.asset(stop,
+                    color: isRecording ? null : Colors.white,
+                    height: spacingPadding7)),
           ),
-          GestureDetector(
-            onTap: switchCamera,
-            child: Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: spacingPadding4,
-                  vertical: spacingPadding4,
-                ),
-                decoration: const BoxDecoration(
-                    color: kPrimaryBlue,
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(20),
-                      bottomRight: Radius.circular(20),
-                    )),
-                child: SvgPicture.asset(alternateCam)),
-          ),
+          if (!isRecording)
+            GestureDetector(
+              onTap: switchCamera,
+              child: Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: spacingPadding4,
+                    vertical: spacingPadding4,
+                  ),
+                  decoration: const BoxDecoration(
+                      color: kPrimaryBlue,
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
+                      )),
+                  child: SvgPicture.asset(alternateCam)),
+            ),
         ],
       ),
     );

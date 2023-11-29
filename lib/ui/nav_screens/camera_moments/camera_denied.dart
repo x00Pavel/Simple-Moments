@@ -33,6 +33,7 @@ class CameraDenied extends StatelessWidget {
                 SvgPicture.asset(cameraNoAccess, height: spacingPadding13),
                 globalGap(10),
                 Text(accessDenied,
+                    textAlign: TextAlign.center,
                     style: semiBoldText(color: Colors.white, fontSize: 22)),
                 globalGap(3),
                 Padding(

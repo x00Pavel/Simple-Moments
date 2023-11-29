@@ -46,8 +46,10 @@ Future initDependencies(AppConfig appConfig) async {
   getItInstance.registerLazySingleton<HomeServiceImp>(
       () => HomeServiceImp(serviceHelpersImp: getItInstance()));
 
-  getItInstance.registerLazySingleton<ProfileServiceImp>(
-      () => ProfileServiceImp(serviceHelpersImp: getItInstance()));
+  getItInstance.registerLazySingleton<ProfileServiceImp>(() =>
+      ProfileServiceImp(
+          serviceHelpersImp: getItInstance(),
+          tempDatabaseImpl: getItInstance()));
 
   // Cubits
   getItInstance
@@ -56,8 +58,9 @@ Future initDependencies(AppConfig appConfig) async {
   getItInstance
       .registerFactory(() => HomeCubit(homeServiceImp: getItInstance()));
 
-  getItInstance
-      .registerFactory(() => ProfileCubit(profileServiceImp: getItInstance()));
+  getItInstance.registerFactory(() => ProfileCubit(
+      profileServiceImp: getItInstance(), tempDatabaseImpl: getItInstance()));
 
-  getItInstance.registerFactory(() => MomentCubit());
+  getItInstance
+      .registerFactory(() => MomentCubit(homeServiceImp: getItInstance()));
 }
