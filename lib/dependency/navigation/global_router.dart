@@ -1,3 +1,4 @@
+import 'package:simple_moments/database/moments_model/moments_model.dart';
 import 'package:simple_moments/ui/auth/get_started_screen/get_started_screen.dart';
 import 'package:simple_moments/ui/auth/onboard_screen/onboard_screen.dart';
 import 'package:simple_moments/ui/auth/otp_screen/otp_screen.dart';
@@ -54,7 +55,9 @@ class GlobalRouter {
 
       case Routes.momentsPreview:
         return MaterialPageRoute(
-            settings: settings, builder: (_) => const MomentsPreview());
+            settings: settings,
+            builder: (_) =>
+                MomentsPreview(moment: settings.arguments as Moment));
     }
   }
 }

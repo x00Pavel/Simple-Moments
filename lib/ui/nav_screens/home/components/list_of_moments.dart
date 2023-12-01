@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:simple_moments/api_service/app_config/app_config.dart';
 import 'package:simple_moments/database/moments_model/moments_model.dart';
+import 'package:simple_moments/dependency/get_it.dart';
 import 'package:simple_moments/dependency/navigation/global_router_exports.dart';
 import 'package:simple_moments/dependency/navigation/navigator_routes.dart';
 import 'package:simple_moments/ui/nav_screens/home/home_cubit.dart';
@@ -45,7 +47,8 @@ class _MomentWidget extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(bottom: spacingPadding5),
       child: GestureDetector(
-        onTap: () => globalNavigateTo(route: Routes.momentsPreview),
+        onTap: () =>
+            globalNavigateTo(route: Routes.momentsPreview, arguments: moment),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -65,7 +68,8 @@ class _MomentWidget extends StatelessWidget {
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) => CachedNetworkImage(
-                              imageUrl: moment.videos[index].thumbnail,
+                              imageUrl:
+                                  '${getItInstance<AppConfig>().baseUrl}thumbnail/${moment.videos[index].video}',
                               fit: BoxFit.cover,
                             )),
                   ),

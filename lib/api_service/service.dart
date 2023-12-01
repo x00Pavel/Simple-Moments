@@ -215,6 +215,8 @@ class ServiceHelpersImp extends ServiceHelpers {
             HttpHeaders.authorizationHeader:
                 'Bearer ${await getItInstance<TempDatabaseImpl>().getUserToken()}'
           }));
+
+      print(response.realUri);
       _showLog(response.data);
       return right(response);
     } on DioException catch (exception) {

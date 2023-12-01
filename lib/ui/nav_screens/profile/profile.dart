@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simple_moments/dependency/navigation/global_router_exports.dart';
+import 'package:simple_moments/ui/global_components/confirm_dailog.dart';
 import 'package:simple_moments/ui/global_components/global_switch.dart';
 import 'package:simple_moments/ui/nav_screens/profile/profile_cubit.dart';
 import 'package:simple_moments/utils/colors.dart';
@@ -89,6 +90,14 @@ class _ProfileState extends State<Profile> {
                         style: regularText(
                             color: Colors.white.withAlpha(100), fontSize: 16)),
                     GestureDetector(
+                      onTap: () => showDialog(
+                          context: context,
+                          builder: (context) => ConfirmDialog(
+                              titleText: 'Do you really want to log out?',
+                              warningText: 'Hope you loved our service?',
+                              okText: 'Log out',
+                              onTap: () =>
+                                  context.read<ProfileCubit>().logOut())),
                       child: Container(
                         padding: EdgeInsets.symmetric(
                             horizontal: spacingPadding3,

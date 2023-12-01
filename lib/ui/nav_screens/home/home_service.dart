@@ -1,18 +1,19 @@
 import 'dart:async';
-import 'dart:io';
+import 'dart:convert';
 
-import 'package:dio/dio.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:simple_moments/api_service/service.dart';
 import 'package:simple_moments/database/database.dart';
+import 'package:simple_moments/database/moments_model/moments_model.dart';
 import 'package:simple_moments/dependency/navigation/navigator_routes.dart';
 import 'package:simple_moments/ui/nav_screens/camera_moments/moments_cubit.dart';
+import 'package:simple_moments/utils/helpers.dart';
 import 'package:simple_moments/utils/loader_dialog.dart';
 
 abstract class HomeService {
-  Future<void> getMoments();
+  Future<List<Moment>> getMoments();
 
   Future<void> uploadMoment({required String imagePath});
 }
@@ -25,17 +26,20 @@ class HomeServiceImp extends HomeService {
       {required this.serviceHelpersImp, required this.tempDatabaseImpl});
 
   @override
-  Future<void> getMoments() async {
-    // var response = await serviceHelpersImp.post(
-    //     endPointUrl: '/auth/customer/send/otp', body: body);
-    //
-    //
-    // response.fold((left) => globalToast('Sorry, an error occurred'), (right) {
-    //   if (right.statusCode == 200) {
-    //     globalToast(right.data['message']);
-    //     // globalNavigateUntil(route: Routes.login);
-    //   }
-    // });
+  Future<List<Moment>> getMoments() async {
+    List<Moment> moments = [];
+
+    var response = await serviceHelpersImp.get(
+        endPointUrl: 'videos/${await tempDatabaseImpl.getUserToken()}');
+
+    response.fold((left) => null, (right) {
+      if (right.statusCode == 200) {
+        try {
+          moments = momentsModelFromJson(jsonEncode(right.data)).moments;
+        } catch (_) {}
+      }
+    });
+    return moments;
   }
 
   @override
@@ -58,7 +62,7 @@ class HomeServiceImp extends HomeService {
         globalPop();
         globalPop();
         buildContext.read<MomentCubit>().getMoments();
-        // tempDatabaseImpl.saveUserData(userData: jsonEncode(right.data['data']));
+        globalToast('Moments uploaded');
       }
     });
   }

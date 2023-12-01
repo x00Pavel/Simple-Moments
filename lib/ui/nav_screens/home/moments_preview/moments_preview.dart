@@ -1,3 +1,4 @@
+import 'package:simple_moments/database/moments_model/moments_model.dart';
 import 'package:simple_moments/dependency/navigation/global_router_exports.dart';
 import 'package:simple_moments/dependency/navigation/navigator_routes.dart';
 import 'package:simple_moments/utils/colors.dart';
@@ -8,7 +9,9 @@ import 'package:simple_moments/utils/text_styles.dart';
 import 'package:video_player/video_player.dart';
 
 class MomentsPreview extends StatefulWidget {
-  const MomentsPreview({super.key});
+  const MomentsPreview({super.key, required this.moment});
+
+  final Moment moment;
 
   @override
   State<MomentsPreview> createState() => _MomentsPreviewState();
@@ -20,8 +23,13 @@ class _MomentsPreviewState extends State<MomentsPreview> {
 
   @override
   void initState() {
+    print(widget.moment.videos.length);
+
+    print((widget.moment.videos[0].video));
+
     super.initState();
-    _controller = VideoPlayerController.networkUrl(Uri.parse(sampleVideo))
+    _controller = VideoPlayerController.networkUrl(Uri.parse(
+        'http://192.168.185.40/video/${widget.moment.videos[0].video}'))
       ..addListener(
           () => setState(() => isPlaying = _controller.value.isPlaying))
       ..initialize().then((_) => setState(() {}))

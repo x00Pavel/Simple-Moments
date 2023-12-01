@@ -27,15 +27,17 @@ class HomeCubit extends Cubit<HomeState> {
 
   void resetState() => emit(_reset);
 
-  void getMoments() {
+  Future<void> getMoments() async {
     state.isLoading = true;
     _emitState();
-    homeServiceImp.getMoments();
-    Future.delayed(const Duration(seconds: 5), () {
-      state.isLoading = false;
-      state.moments = demoMoments;
-      _emitState();
+    await homeServiceImp.getMoments().then((value) {
+      if (value.isNotEmpty) {
+        state.moments = value;
+        _emitState();
+      }
     });
+    state.isLoading = false;
+    _emitState();
   }
 
   void captureMoment({bool isFromAllowScreen = false}) async {
