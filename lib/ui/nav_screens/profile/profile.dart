@@ -4,13 +4,25 @@ import 'package:simple_moments/ui/global_components/global_switch.dart';
 import 'package:simple_moments/ui/nav_screens/profile/profile_cubit.dart';
 import 'package:simple_moments/utils/colors.dart';
 import 'package:simple_moments/utils/dimensions.dart';
+import 'package:simple_moments/utils/extensions/global_extensions.dart';
 import 'package:simple_moments/utils/global_padding.dart';
 import 'package:simple_moments/utils/helpers.dart';
 import 'package:simple_moments/utils/size_config.dart';
 import 'package:simple_moments/utils/text_styles.dart';
 
-class Profile extends StatelessWidget {
+class Profile extends StatefulWidget {
   const Profile({super.key});
+
+  @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<ProfileCubit>().getProfile();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,16 +34,23 @@ class Profile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               globalGap(spacingPadding2),
-              Text('Ivan Smotaj',
+              Text(
+                  state.profileModel != null
+                      ? state.profileModel!.user.name
+                      : '',
                   style: semiBoldText(color: Colors.white, fontSize: 22)),
-              Text('@smotAJ',
+              Text(
+                  state.profileModel != null
+                      ? state.profileModel!.user.email
+                      : '',
                   style: regularText(
                       color: Colors.white.withAlpha(100), fontSize: 16)),
               globalGap(spacingPadding4),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text('Customize',
-                    style: regularText(color: Colors.white.withAlpha(100), fontSize: 16)),
+                    style: regularText(
+                        color: Colors.white.withAlpha(100), fontSize: 16)),
               ),
               _ProfileContainer(
                 child: Row(
@@ -52,8 +71,12 @@ class Profile extends StatelessWidget {
                   children: [
                     Text('Notification time',
                         style: regularText(color: Colors.white, fontSize: 16)),
-                    Text('11:35 PM',
-                        style: regularText(color: Colors.white.withAlpha(100), fontSize: 16)),
+                    Text(
+                        state.profileModel != null
+                            ? state.profileModel!.user.notifyTime.formatDate
+                            : '',
+                        style: regularText(
+                            color: Colors.white.withAlpha(100), fontSize: 16)),
                   ],
                 ),
               ),
@@ -63,9 +86,9 @@ class Profile extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('Wanna stop capturing?',
-                        style: regularText(color: Colors.white.withAlpha(100), fontSize: 16)),
+                        style: regularText(
+                            color: Colors.white.withAlpha(100), fontSize: 16)),
                     GestureDetector(
-
                       child: Container(
                         padding: EdgeInsets.symmetric(
                             horizontal: spacingPadding3,

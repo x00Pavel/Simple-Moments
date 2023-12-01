@@ -19,3 +19,7 @@ const String accessDenied = 'Camera or mic access was denied.';
 
 const String privacy = 'By creating an account, you agree to our Terms'
     ' \nof Service and Privacy Policy';
+
+const String sampleVideo = 'https://firebasestorage.googleapis.'
+    'com/v0/b/videostreaming-test.appspot.com/o/vid%2FSnaptik_67456'
+    '71851688692998_tiktok.mp4?alt=media&token=e6c76be2-9d8e-4be6-aedc-89ddd4985871';

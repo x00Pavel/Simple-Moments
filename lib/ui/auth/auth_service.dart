@@ -63,16 +63,12 @@ class AuthServiceImp extends AuthService {
               endPointUrl: 'auth/google',
               body: {'ID_token': googleAuth.idToken});
 
-          tempDatabaseImpl.saveUserToken(token: '2');
-          globalNavigateTo(route: Routes.domain);
-
           response.fold((left) => globalToast('Sorry, an error occurred'),
               (right) {
             if (right.statusCode == 200) {
               globalToast(right.data['message']);
-
-              // tempDatabaseImpl.saveUserToken(token: '2');
-              // globalNavigateTo(route: Routes.domain);
+              tempDatabaseImpl.saveUserToken(token: right.data['token']);
+              globalNavigateTo(route: Routes.domain);
             }
           });
         }
@@ -125,6 +121,7 @@ class AuthServiceImp extends AuthService {
           .then((value) {
         if (value.user != null) {
           print('value.user!.uid ${value.user!.uid}');
+          tempDatabaseImpl.saveUserToken(token: '2');
           globalNavigateTo(route: Routes.domain);
           globalToast('Successfully logged in');
         } else {

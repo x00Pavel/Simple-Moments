@@ -19,7 +19,6 @@ class Moment {
   final DateTime endDate;
   final bool isComplete;
   final List<Video> videos;
-
   Moment({
     required this.startDate,
     required this.endDate,
@@ -48,6 +47,16 @@ class Video {
         thumbnail: json['temp_img'],
         video: json['video'],
       );
+
+
+  // CachedVideoPlayerController? controller;
+  //
+  // Future<Null> loadController() async {
+  //   controller = CachedVideoPlayerController.network(url);
+  //   await controller?.initialize();
+  //   controller?.setLooping(true);
+  // }
+
 }
 
 List<Moment> demoMoments = [

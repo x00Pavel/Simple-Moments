@@ -13,6 +13,7 @@ class Routes {
   // Main
   static const String cameraMoments = '/cameraMoments';
   static const String allowCamera = '/allowCamera';
-  static const String cameraDenied = 'cCameraDenied';
+  static const String cameraDenied = 'cameraDenied';
+  static const String momentsPreview = 'momentsPreview';
 
 }

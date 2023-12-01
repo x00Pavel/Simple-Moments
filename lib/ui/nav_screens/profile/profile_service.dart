@@ -17,11 +17,13 @@ class ProfileServiceImp extends ProfileService {
 
   @override
   Future<void> getProfile() async {
-    var response =
-        await serviceHelpersImp.get(endPointUrl: '/userinfo/${tempDatabaseImpl.getUserToken()}}');
-    response.fold((left) => null, (right) {
+
+    var response = await serviceHelpersImp.get(
+        endPointUrl: '/userinfo/${await tempDatabaseImpl.getUserToken()}');
+
+    response.fold((left) => null, (right) async {
       if (right.statusCode == 200) {
-        tempDatabaseImpl.saveUserData(userData: jsonEncode(right.data['data']));
+        tempDatabaseImpl.saveUserData(userData: jsonEncode(right.data));
       }
     });
   }

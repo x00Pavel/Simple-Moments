@@ -8,10 +8,10 @@ class ProfileState {
   bool isOpened;
   ProfileModel? profileModel;
 
-  ProfileState({required this.isOpened});
+  ProfileState({required this.isOpened, required this.profileModel});
 }
 
-ProfileState _reset = ProfileState(isOpened: false);
+ProfileState _reset = ProfileState(isOpened: false, profileModel: null);
 
 class ProfileCubit extends Cubit<ProfileState> {
   ProfileServiceImp profileServiceImp;
@@ -21,7 +21,8 @@ class ProfileCubit extends Cubit<ProfileState> {
       {required this.profileServiceImp, required this.tempDatabaseImpl})
       : super(_reset);
 
-  void _emitState() => emit(ProfileState(isOpened: state.isOpened));
+  void _emitState() => emit(
+      ProfileState(isOpened: state.isOpened, profileModel: state.profileModel));
 
   void resetState() => emit(_reset);
 
@@ -31,7 +32,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   Future<void> getProfile() async {
-    tempDatabaseImpl.getUserData().then((userData) {
+    await tempDatabaseImpl.getUserData().then((userData) {
       if (userData.isNotEmpty) {
         state.profileModel = profileModelFromJson(userData);
         _emitState();

@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:simple_moments/api_service/service.dart';
+import 'package:simple_moments/database/database.dart';
 import 'package:simple_moments/dependency/navigation/navigator_routes.dart';
 import 'package:simple_moments/ui/nav_screens/camera_moments/moments_cubit.dart';
 import 'package:simple_moments/utils/loader_dialog.dart';
@@ -18,8 +19,10 @@ abstract class HomeService {
 
 class HomeServiceImp extends HomeService {
   ServiceHelpersImp serviceHelpersImp;
+  TempDatabaseImpl tempDatabaseImpl;
 
-  HomeServiceImp({required this.serviceHelpersImp});
+  HomeServiceImp(
+      {required this.serviceHelpersImp, required this.tempDatabaseImpl});
 
   @override
   Future<void> getMoments() async {
@@ -40,12 +43,13 @@ class HomeServiceImp extends HomeService {
     showLoaderDialog();
 
     var formData = FormData.fromMap({
-      'avatar': await MultipartFile.fromFile(imagePath,
+      'user_id': await tempDatabaseImpl.getUserToken(),
+      'file': await MultipartFile.fromFile(imagePath,
           filename: 'image.name', contentType: MediaType('video', 'mp4'))
     });
 
     var response = await serviceHelpersImp.postFormData(
-        endPointUrl: '/userinfo/', formData: formData);
+        endPointUrl: 'upload', formData: formData);
 
     globalPop();
 

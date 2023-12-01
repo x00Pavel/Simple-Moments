@@ -115,6 +115,10 @@ class ServiceHelpersImp extends ServiceHelpers {
           },
         ),
       );
+
+
+      print(response.extra);
+
       _showLog(response.data);
       return right(response);
     } on DioException catch (exception) {

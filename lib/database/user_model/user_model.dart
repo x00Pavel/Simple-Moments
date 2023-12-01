@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final profileModel = profileModelFromJson(jsonString);
-
 import 'dart:convert';
 
 ProfileModel profileModelFromJson(String str) => ProfileModel.fromJson(json.decode(str));
@@ -25,7 +21,7 @@ class ProfileModel {
 }
 
 class User {
-  final int id;
+  final String id;
   final String name;
   final int lastUploadedVideo;
   final bool notifyMoments;
@@ -44,7 +40,7 @@ class User {
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-    id: json['id'] ?? 0,
+    id: json['id'] ?? '',
     name: json['name'] ?? '',
     lastUploadedVideo: json['last_uploaded_video'],
     notifyMoments: json['notify_moments'],

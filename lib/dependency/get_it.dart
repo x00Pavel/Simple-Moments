@@ -43,8 +43,8 @@ Future initDependencies(AppConfig appConfig) async {
   getItInstance.registerLazySingleton<AuthServiceImp>(() => AuthServiceImp(
       serviceHelpersImp: getItInstance(), tempDatabaseImpl: getItInstance()));
 
-  getItInstance.registerLazySingleton<HomeServiceImp>(
-      () => HomeServiceImp(serviceHelpersImp: getItInstance()));
+  getItInstance.registerLazySingleton<HomeServiceImp>(() => HomeServiceImp(
+      serviceHelpersImp: getItInstance(), tempDatabaseImpl: getItInstance()));
 
   getItInstance.registerLazySingleton<ProfileServiceImp>(() =>
       ProfileServiceImp(
