@@ -2,8 +2,12 @@ import 'package:intl/intl.dart';
 
 extension FormatDate on DateTime {
   String get formatDate {
-    final dateFormat = DateFormat('mm:hh');
+    final dateFormat = DateFormat('MMM d, ' 'yyyy');
     return dateFormat.format(this);
+  }
+
+  String get formatTime {
+    return DateFormat.jm().format(this);
   }
 }
 

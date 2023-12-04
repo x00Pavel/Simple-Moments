@@ -2,15 +2,19 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:simple_moments/api_service/service.dart';
 import 'package:simple_moments/database/database.dart';
 import 'package:simple_moments/database/moments_model/moments_model.dart';
+import 'package:simple_moments/dependency/navigation/global_routes.dart';
 import 'package:simple_moments/dependency/navigation/navigator_routes.dart';
 import 'package:simple_moments/ui/nav_screens/camera_moments/moments_cubit.dart';
 import 'package:simple_moments/utils/helpers.dart';
 import 'package:simple_moments/utils/loader_dialog.dart';
+
+import 'home_cubit.dart';
 
 abstract class HomeService {
   Future<List<Moment>> getMoments();
@@ -57,11 +61,10 @@ class HomeServiceImp extends HomeService {
 
     globalPop();
 
-    response.fold((left) => null, (right) {
+    response.fold((left) => debugPrint(left.message), (right) {
       if (right.statusCode == 200) {
-        globalPop();
-        globalPop();
-        buildContext.read<MomentCubit>().getMoments();
+        buildContext.read<HomeCubit>().getMoments();
+        globalNavigateUntil(route: Routes.domain);
         globalToast('Moments uploaded');
       }
     });

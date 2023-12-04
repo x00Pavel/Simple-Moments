@@ -61,24 +61,29 @@ class _ProfileState extends State<Profile> {
                         style: regularText(color: Colors.white, fontSize: 16)),
                     GlobalSwitch(
                       isOpened: state.isOpened,
-                      onTap: () => context.read<ProfileCubit>().toggleSwitch(),
+                      onTap: () => context.read<ProfileCubit>().isNotify(),
                     ),
                   ],
                 ),
               ),
-              _ProfileContainer(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Notification time',
-                        style: regularText(color: Colors.white, fontSize: 16)),
-                    Text(
-                        state.profileModel != null
-                            ? state.profileModel!.user.notifyTime.formatDate
-                            : '',
-                        style: regularText(
-                            color: Colors.white.withAlpha(100), fontSize: 16)),
-                  ],
+              GestureDetector(
+                onTap: () => context.read<ProfileCubit>().changeTime(),
+                child: _ProfileContainer(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Notification time',
+                          style:
+                              regularText(color: Colors.white, fontSize: 16)),
+                      Text(
+                          state.profileModel != null
+                              ? state.profileModel!.user.notifyTime.formatTime
+                              : '',
+                          style: regularText(
+                              color: Colors.white.withAlpha(100),
+                              fontSize: 16)),
+                    ],
+                  ),
                 ),
               ),
               globalGap(spacingPadding2),

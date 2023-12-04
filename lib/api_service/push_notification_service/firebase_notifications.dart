@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:simple_moments/dependency/get_it.dart';
+import 'package:simple_moments/ui/auth/auth_cubit.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 FlutterLocalNotificationsPlugin();
@@ -53,7 +55,7 @@ class PushNotificationService {
   void addToken() async {
     await _firebaseMessaging.getToken().then((token) {
       if (token != null) {
-        // getItInstance<AuthCubit>().addDeviceToken(token: token);
+        getItInstance<AuthCubit>().addDeviceToken(token: token);
       }
     });
   }
@@ -69,12 +71,11 @@ class PushNotificationService {
     FirebaseMessaging.onMessage.listen(
           (message) async {
         showNotification(notification: message.notification);
-        // buildContext.read<OrderAndCartCubit>().getOrders(isLoading: false);
       },
     );
 
-    // FirebaseMessaging.instance.onTokenRefresh.listen(
-    //         (event) => getItInstance<AuthCubit>().addDeviceToken(token: event));
+    FirebaseMessaging.instance.onTokenRefresh.listen(
+            (event) => getItInstance<AuthCubit>().addDeviceToken(token: event));
 
     FirebaseMessaging.onMessageOpenedApp.listen(
           (message) async {

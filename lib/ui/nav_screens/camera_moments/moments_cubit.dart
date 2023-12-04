@@ -42,7 +42,4 @@ class MomentCubit extends Cubit<MomentState> {
     homeServiceImp.uploadMoment(imagePath: state.filePath);
   }
 
-  void getMoments() {
-    homeServiceImp.getMoments();
-  }
 }

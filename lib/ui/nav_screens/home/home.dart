@@ -9,8 +9,19 @@ import 'package:simple_moments/utils/text_styles.dart';
 import 'components/empty_moment_widget.dart';
 import 'components/list_of_moments.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({super.key});
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  @override
+  void initState() {
+    context.read<HomeCubit>().getMoments();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
