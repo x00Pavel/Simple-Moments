@@ -18,15 +18,17 @@ class MomentsPreview extends StatelessWidget {
           body: Stack(
             children: [
               state.isLoading
-                  ? Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const CupertinoActivityIndicator(color: Colors.white),
-                        globalGap(2),
-                        Text('Loading ...',
-                            style: mediumText(color: Colors.white)),
-                      ],
-                    )
+                  ? Center(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const CupertinoActivityIndicator(color: Colors.white),
+                    globalGap(2),
+                    Text('Loading ...',
+                        style: mediumText(color: Colors.white)),
+                  ],
+                ),
+              )
                   : PageView.builder(
                       controller:
                           PageController(initialPage: 0, viewportFraction: 1),

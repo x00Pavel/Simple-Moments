@@ -10,7 +10,6 @@ import 'package:simple_moments/database/database.dart';
 import 'package:simple_moments/database/moments_model/moments_model.dart';
 import 'package:simple_moments/dependency/navigation/global_routes.dart';
 import 'package:simple_moments/dependency/navigation/navigator_routes.dart';
-import 'package:simple_moments/ui/nav_screens/camera_moments/moments_cubit.dart';
 import 'package:simple_moments/utils/helpers.dart';
 import 'package:simple_moments/utils/loader_dialog.dart';
 
@@ -34,7 +33,7 @@ class HomeServiceImp extends HomeService {
     List<Moment> moments = [];
 
     var response = await serviceHelpersImp.get(
-        endPointUrl: 'videos/${await tempDatabaseImpl.getUserToken()}');
+        endPointUrl: 'user/videos/${await tempDatabaseImpl.getUserToken()}');
 
     response.fold((left) => null, (right) {
       if (right.statusCode == 200) {
@@ -55,7 +54,7 @@ class HomeServiceImp extends HomeService {
     });
 
     var response = await serviceHelpersImp.postFormData(
-        endPointUrl: 'upload', formData: formData);
+        endPointUrl: 'user/upload', formData: formData);
 
     globalPop();
 
