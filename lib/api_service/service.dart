@@ -58,8 +58,8 @@ class ServiceHelpersImp extends ServiceHelpers {
   BaseOptions options = BaseOptions(
       baseUrl: _baseUrl,
       receiveDataWhenStatusError: true,
-      connectTimeout: const Duration(seconds: 10), // 10 seconds
-      receiveTimeout: const Duration(seconds: 10) // 10 seconds
+      connectTimeout: const Duration(seconds: 60), // 10 seconds
+      receiveTimeout: const Duration(seconds: 60) // 10 seconds
       );
 
   ServiceHelpersImp({required this.dio, required this.tempDatabaseImpl});

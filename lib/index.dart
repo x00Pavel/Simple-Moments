@@ -59,7 +59,7 @@ class _IndexState extends State<Index> {
               ],
               child: MaterialApp(
                   title: getItInstance<AppConfig>().appName,
-                  debugShowCheckedModeBanner: getItInstance<AppConfig>().isDev,
+                  debugShowCheckedModeBanner: false,
                   theme: ThemeData(primarySwatch: materialPrimaryColor()),
                   initialRoute: Routes.splashScreen,
                   navigatorKey:

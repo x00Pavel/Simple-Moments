@@ -26,7 +26,7 @@ class _CameraMomentsState extends State<CameraMoments>
   bool isRecording = false;
 
   late Timer _timer;
-  int _start = 5;
+  int _start = 3;
 
   void _startTimer() {
     const oneSec = Duration(seconds: 1);
@@ -86,7 +86,7 @@ class _CameraMomentsState extends State<CameraMoments>
       _controller!.enableAudio;
       setState(() => isRecording = true);
       _startTimer();
-      Future.delayed(const Duration(seconds: 5), () => _stopRecording());
+      Future.delayed(const Duration(seconds: 3), () => _stopRecording());
     } on CameraException catch (_) {}
   }
 

@@ -1,4 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:simple_moments/api_service/app_config/app_config.dart';
@@ -26,8 +28,12 @@ class _ListOfMomentsState extends State<ListOfMoments> {
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
         return Flexible(
-          child: RefreshIndicator(
+          child: CustomRefreshIndicator(
             onRefresh: () => context.read<HomeCubit>().getMoments(),
+            builder: MaterialIndicatorDelegate(
+              builder: (context, controller) => Transform.scale(
+                  scale: 3, child: const CupertinoActivityIndicator()),
+            ),
             child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
               child: ListView.builder(
