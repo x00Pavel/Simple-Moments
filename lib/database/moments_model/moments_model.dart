@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:cached_video_player/cached_video_player.dart';
 import 'package:simple_moments/api_service/app_config/app_config.dart';
 import 'package:simple_moments/dependency/get_it.dart';
+import 'package:video_player/video_player.dart';
 
 MomentsModel momentsModelFromJson(String str) =>
     MomentsModel.fromJson(json.decode(str));
@@ -43,7 +43,7 @@ class Video {
   final String video;
   final String tempImg;
 
-  CachedVideoPlayerController? controller;
+  VideoPlayerController? controller;
 
   Video({
     required this.video,
@@ -56,8 +56,8 @@ class Video {
       );
 
   Future<void> loadController() async {
-    controller = CachedVideoPlayerController.network(
-        '${getItInstance<AppConfig>().baseUrl}video/$video');
+    controller = VideoPlayerController.networkUrl(
+        Uri.parse('${getItInstance<AppConfig>().baseUrl}video/$video'));
     await controller?.initialize();
     controller?.setLooping(true);
   }
