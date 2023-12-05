@@ -83,7 +83,8 @@ dependencies:
 
   # Camera
   camera: ^0.10.5+5
-  video_player: ^2.8.1
+  video_player:
+  cached_video_player:
 
   # Flip counter
   animated_flip_counter: ^0.2.6

@@ -38,9 +38,7 @@ class HomeServiceImp extends HomeService {
 
     response.fold((left) => null, (right) {
       if (right.statusCode == 200) {
-        try {
-          moments = momentsModelFromJson(jsonEncode(right.data)).moments;
-        } catch (_) {}
+        moments = momentsModelFromJson(jsonEncode(right.data)).moments;
       }
     });
     return moments;

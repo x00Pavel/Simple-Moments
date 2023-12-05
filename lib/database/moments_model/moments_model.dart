@@ -1,5 +1,9 @@
 import 'dart:convert';
 
+import 'package:cached_video_player/cached_video_player.dart';
+import 'package:simple_moments/api_service/app_config/app_config.dart';
+import 'package:simple_moments/dependency/get_it.dart';
+
 MomentsModel momentsModelFromJson(String str) =>
     MomentsModel.fromJson(json.decode(str));
 
@@ -28,7 +32,7 @@ class Moment {
   });
 
   factory Moment.fromJson(Map<String, dynamic> json) => Moment(
-        startDate: DateTime.parse(json['start_date']),
+        startDate: DateTime.parse(json['begin_date']),
         endDate: DateTime.parse(json['end_date']),
         isComplete: json['is_complete'],
         videos: List<Video>.from(json['videos'].map((x) => Video.fromJson(x))),
@@ -39,6 +43,8 @@ class Video {
   final String video;
   final String tempImg;
 
+  CachedVideoPlayerController? controller;
+
   Video({
     required this.video,
     required this.tempImg,
@@ -48,4 +54,11 @@ class Video {
         video: json['video'] ?? '',
         tempImg: json['temp_img'] ?? '',
       );
+
+  Future<void> loadController() async {
+    controller = CachedVideoPlayerController.network(
+        '${getItInstance<AppConfig>().baseUrl}video/$video');
+    await controller?.initialize();
+    controller?.setLooping(true);
+  }
 }

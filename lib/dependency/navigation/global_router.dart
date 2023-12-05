@@ -9,6 +9,7 @@ import 'package:simple_moments/ui/nav_screens/camera_moments/allow_camera.dart';
 import 'package:simple_moments/ui/nav_screens/camera_moments/camera_denied.dart';
 import 'package:simple_moments/ui/nav_screens/camera_moments/camera_moments.dart';
 import 'package:simple_moments/ui/nav_screens/home/moments_preview/moments_preview.dart';
+import 'package:simple_moments/ui/nav_screens/home/moments_preview/moments_preview.dart';
 
 import 'global_router_exports.dart';
 
@@ -55,9 +56,7 @@ class GlobalRouter {
 
       case Routes.momentsPreview:
         return MaterialPageRoute(
-            settings: settings,
-            builder: (_) =>
-                MomentsPreview(moment: settings.arguments as Moment));
+            settings: settings, builder: (_) => MomentsPreview());
     }
   }
 }

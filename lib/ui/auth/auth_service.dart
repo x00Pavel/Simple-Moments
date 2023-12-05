@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:simple_moments/api_service/service.dart';
@@ -14,16 +15,13 @@ import '../../dependency/navigation/navigator_routes.dart';
 import 'auth_cubit.dart';
 
 abstract class AuthService {
-  Future<String> phoneAuth({
-    required String phoneNumber,
-    required String dailCode,
-  });
+  Future<String> phoneAuth({required String phoneNumber});
 
   Future<void> googleAuth();
 
   Future<void> validateOtp({required String otp, required String token});
 
-  Future<void> addDeviceToken({required String token});
+  Future<void> addDeviceToken();
 }
 
 class AuthServiceImp extends AuthService {
@@ -68,6 +66,7 @@ class AuthServiceImp extends AuthService {
             if (right.statusCode == 200) {
               globalToast(right.data['message']);
               tempDatabaseImpl.saveUserToken(token: right.data['token']);
+              addDeviceToken();
               globalNavigateTo(route: Routes.domain);
             }
           });
@@ -82,15 +81,12 @@ class AuthServiceImp extends AuthService {
   }
 
   @override
-  Future<String> phoneAuth({
-    required String phoneNumber,
-    required String dailCode,
-  }) async {
+  Future<String> phoneAuth({required String phoneNumber}) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     String verificationId = '';
 
     await auth.verifyPhoneNumber(
-      phoneNumber: '$dailCode$phoneNumber',
+      phoneNumber: phoneNumber,
       timeout: const Duration(seconds: 60),
       verificationCompleted: (PhoneAuthCredential credential) async {},
       verificationFailed: (FirebaseAuthException error) {
@@ -120,7 +116,6 @@ class AuthServiceImp extends AuthService {
               PhoneAuthProvider.credential(verificationId: token, smsCode: otp))
           .then((value) {
         if (value.user != null) {
-          print('value.user!.uid ${value.user!.uid}');
           tempDatabaseImpl.saveUserToken(token: '2');
           globalNavigateTo(route: Routes.domain);
           globalToast('Successfully logged in');
@@ -135,8 +130,24 @@ class AuthServiceImp extends AuthService {
   }
 
   @override
-  Future<void> addDeviceToken({required String token}) {
-    // TODO: implement addDeviceToken
-    throw UnimplementedError();
+  Future<void> addDeviceToken() async {
+    final _firebaseMessaging = FirebaseMessaging.instance;
+
+    await _firebaseMessaging.getToken().then((token) async {
+      if (token != null) {
+        var response = await serviceHelpersImp.post(
+            endPointUrl: 'user/add/device',
+            body: {
+              'device_id': token,
+              'user_id': await tempDatabaseImpl.getUserToken() ?? ''
+            });
+
+        response.fold((left) => debugPrint(left.message), (right) async {
+          if (right.data['statusCode'] == 200) {
+            debugPrint(right.data);
+          }
+        });
+      }
+    });
   }
 }

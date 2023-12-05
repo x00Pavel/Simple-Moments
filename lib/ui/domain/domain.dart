@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simple_moments/ui/global_components/bottom_nav_widget.dart';
 import 'package:simple_moments/ui/nav_screens/home/home.dart';
+import 'package:simple_moments/ui/nav_screens/home/home_cubit.dart';
 import 'package:simple_moments/ui/nav_screens/profile/profile.dart';
 import 'package:simple_moments/ui/nav_screens/profile/profile_cubit.dart';
 import 'package:simple_moments/utils/colors.dart';

@@ -9,7 +9,8 @@ class AppConfig {
 
 AppConfig devMode = AppConfig(
   appName: 'Simplmet(Dev)',
-  baseUrl: 'http://192.168.185.40/',
+  baseUrl: 'https://simplemoments.stanislavjochman.sk/',
+  // baseUrl: 'http://192.168.185.40/',
   isDev: true,
 );
 

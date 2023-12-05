@@ -1,12 +1,14 @@
 import 'dart:async';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:simple_moments/dependency/get_it.dart';
+import 'package:simple_moments/firebase_options.dart';
 import 'package:simple_moments/ui/auth/auth_cubit.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
+    FlutterLocalNotificationsPlugin();
 
 Future<AndroidNotificationChannel> channel() async {
   return const AndroidNotificationChannel(
@@ -44,7 +46,7 @@ void showNotification({required RemoteNotification? notification}) async {
 
 @pragma('vm:entry-point')
 Future<void> onBackgroundMessage(RemoteMessage message) async {
-  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   PushNotificationService().createChannel();
 }
@@ -55,7 +57,7 @@ class PushNotificationService {
   void addToken() async {
     await _firebaseMessaging.getToken().then((token) {
       if (token != null) {
-        getItInstance<AuthCubit>().addDeviceToken(token: token);
+
       }
     });
   }
@@ -69,48 +71,21 @@ class PushNotificationService {
     FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
 
     FirebaseMessaging.onMessage.listen(
-          (message) async {
+      (message) async {
         showNotification(notification: message.notification);
       },
     );
 
     FirebaseMessaging.instance.onTokenRefresh.listen(
-            (event) => getItInstance<AuthCubit>().addDeviceToken(token: event));
-
-    FirebaseMessaging.onMessageOpenedApp.listen(
-          (message) async {
-        var payLoad = convertPayload(message.data.toString());
-        // if (payLoad['notificationType'] == 'order')
-        //   globalPushNotificationNavigation(
-        //       initialRoute: Routes.domain,
-        //       finalRoute: Routes.orderDetails,
-        //       arguments: payLoad['orderId'].toString());
-      },
-    );
-
-    addToken();
-  }
-
-  Map<String, dynamic> convertPayload(String payload) {
-    final String load = payload.substring(1, payload.length - 1);
-    List<String> split = [];
-
-    load.split(',').forEach((String s) => split.addAll(s.split(': ')));
-    Map<String, dynamic> mapped = {};
-    for (int i = 0; i < split.length; i++) {
-      if (i % 2 == 1) {
-        mapped.addAll({split[i - 1].trim().toString(): split[i].trim()});
-      }
-    }
-    return mapped;
+        (event) => getItInstance<AuthCubit>().addDeviceToken());
   }
 
   createChannel() async {
     AndroidInitializationSettings initializationSettingsAndroid =
-    const AndroidInitializationSettings('@mipmap/launcher_icon');
+        const AndroidInitializationSettings('@mipmap/ic_launcher');
 
     DarwinInitializationSettings initializationSettingsIOS =
-    const DarwinInitializationSettings();
+        const DarwinInitializationSettings();
 
     InitializationSettings initializationSettings = InitializationSettings(
         android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
@@ -119,7 +94,7 @@ class PushNotificationService {
 
     await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>()
+            AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(await channel());
 
     /// Update the iOS foreground notification presentation options to allow

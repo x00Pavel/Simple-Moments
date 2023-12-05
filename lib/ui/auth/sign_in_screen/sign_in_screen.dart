@@ -54,12 +54,14 @@ class _SignInScreenState extends State<SignInScreen> {
                       onTap: () => globalPop(),
                       child: Container(
                         color: Colors.transparent,
-                        padding: EdgeInsets.symmetric(vertical: spacingPadding2),
+                        padding:
+                            EdgeInsets.symmetric(vertical: spacingPadding2),
                         child: Row(
                           children: [
                             const Icon(Icons.arrow_back_ios, color: kWhite),
                             Text('Enter Phone Number',
-                                style: extraBoldText(fontSize: 30, color: kWhite)),
+                                style:
+                                    extraBoldText(fontSize: 30, color: kWhite)),
                           ],
                         ),
                       ),
@@ -82,10 +84,10 @@ class _SignInScreenState extends State<SignInScreen> {
                         btnText: 'Continue',
                         onTap: () {
                           if (_formKey.validate) {
+                            print(phoneController.text);
                             context.read<AuthCubit>().authenticate(
                                 phoneNumber:
-                                    phoneController.text.replaceAll(' ', ''),
-                                dailCode: '+420');
+                                    phoneController.text.replaceAll(' ', ''));
                           }
                         })
                   ],

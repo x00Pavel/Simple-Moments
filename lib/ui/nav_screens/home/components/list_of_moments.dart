@@ -13,9 +13,14 @@ import 'package:simple_moments/utils/global_assets.dart';
 import 'package:simple_moments/utils/helpers.dart';
 import 'package:simple_moments/utils/text_styles.dart';
 
-class ListOfMoments extends StatelessWidget {
+class ListOfMoments extends StatefulWidget {
   const ListOfMoments({super.key});
 
+  @override
+  State<ListOfMoments> createState() => _ListOfMomentsState();
+}
+
+class _ListOfMomentsState extends State<ListOfMoments> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeCubit, HomeState>(
@@ -50,8 +55,10 @@ class _MomentWidget extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(bottom: spacingPadding5),
       child: GestureDetector(
-        onTap: () =>
-            globalNavigateTo(route: Routes.momentsPreview, arguments: moment),
+        onTap: () {
+          context.read<HomeCubit>().getVideos(moment: moment);
+          globalNavigateTo(route: Routes.momentsPreview);
+        },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

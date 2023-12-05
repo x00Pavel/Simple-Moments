@@ -5,13 +5,11 @@ import 'auth_service.dart';
 class AuthState {
   bool isLoading;
   String phoneNumber;
-  String dailCode;
   String verificationId, password, confirmPassword;
 
   AuthState({
     required this.isLoading,
     required this.phoneNumber,
-    required this.dailCode,
     required this.password,
     required this.verificationId,
     required this.confirmPassword,
@@ -24,7 +22,6 @@ class AuthCubit extends Cubit<AuthState> {
   AuthCubit({required this.authServiceImp})
       : super(AuthState(
           isLoading: false,
-          dailCode: '',
           phoneNumber: '',
           verificationId: '',
           password: '',
@@ -35,7 +32,6 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthState(
       isLoading: false,
       phoneNumber: '',
-      dailCode: '',
       verificationId: '',
       password: '',
       confirmPassword: '',
@@ -45,16 +41,14 @@ class AuthCubit extends Cubit<AuthState> {
   void _emitState() => emit(AuthState(
         isLoading: state.isLoading,
         phoneNumber: state.phoneNumber,
-        dailCode: state.dailCode,
         password: state.password,
         verificationId: state.verificationId,
         confirmPassword: state.confirmPassword,
       ));
 
-  void authenticate(
-      {required String phoneNumber, required String dailCode}) async {
-    state.phoneNumber = dailCode + phoneNumber;
-    authServiceImp.phoneAuth(phoneNumber: phoneNumber, dailCode: dailCode);
+  void authenticate({required String phoneNumber}) async {
+    state.phoneNumber = phoneNumber;
+    authServiceImp.phoneAuth(phoneNumber: phoneNumber);
   }
 
   void saveID({required String verificationId}) async {
@@ -68,14 +62,11 @@ class AuthCubit extends Cubit<AuthState> {
     authServiceImp.validateOtp(token: state.verificationId, otp: otp);
   }
 
-  void addDeviceToken({required String token}) async =>
-      authServiceImp.addDeviceToken(token: token);
-
-  void resendOtp() async => authServiceImp.phoneAuth(
-      phoneNumber: state.phoneNumber, dailCode: state.dailCode);
-
-  void updateToken({required String token}) async {
-    state.verificationId = token;
+  void addDeviceToken() async {
     _emitState();
+    authServiceImp.addDeviceToken();
   }
+
+  void resendOtp() async =>
+      authServiceImp.phoneAuth(phoneNumber: state.phoneNumber);
 }
