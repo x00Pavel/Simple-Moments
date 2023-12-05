@@ -1,4 +1,3 @@
-import 'package:cached_video_player/cached_video_player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_moments/database/moments_model/moments_model.dart';
@@ -7,6 +6,7 @@ import 'package:simple_moments/utils/colors.dart';
 import 'package:simple_moments/utils/helpers.dart';
 import 'package:simple_moments/utils/size_config.dart';
 import 'package:simple_moments/utils/text_styles.dart';
+import 'package:video_player/video_player.dart';
 
 class VideoItem extends StatefulWidget {
   const VideoItem({Key? key, required this.video}) : super(key: key);
@@ -35,7 +35,7 @@ class _VideoItemState extends State<VideoItem> {
                   child: SizedBox(
                     width: widget.video.controller?.value.size.width ?? 0,
                     height: widget.video.controller?.value.size.height ?? 0,
-                    child: CachedVideoPlayer(widget.video.controller!),
+                    child: VideoPlayer(widget.video.controller!),
                   ),
                 )),
               )
