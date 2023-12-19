@@ -51,22 +51,28 @@ class AuthCubit extends Cubit<AuthState> {
     authServiceImp.phoneAuth(phoneNumber: phoneNumber);
   }
 
-  void saveID({required String verificationId}) async {
-    state.verificationId = verificationId;
-    _emitState();
-  }
-
   void googleAuth() async => authServiceImp.googleAuth();
 
   void validateOtp({required String otp}) async {
     authServiceImp.validateOtp(token: state.verificationId, otp: otp);
   }
 
+  void resendOtp() async =>
+      authServiceImp.phoneAuth(phoneNumber: state.phoneNumber);
+
+  void saveID({required String verificationId}) async {
+    state.verificationId = verificationId;
+    _emitState();
+  }
+
+
   void addDeviceToken() async {
     _emitState();
     authServiceImp.addDeviceToken();
   }
 
-  void resendOtp() async =>
-      authServiceImp.phoneAuth(phoneNumber: state.phoneNumber);
+  void getUserCountry() async {
+    authServiceImp.getUserCountry();
+  }
+
 }

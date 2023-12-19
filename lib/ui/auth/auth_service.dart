@@ -22,6 +22,8 @@ abstract class AuthService {
   Future<void> validateOtp({required String otp, required String token});
 
   Future<void> addDeviceToken();
+
+  Future<String> getUserCountry();
 }
 
 class AuthServiceImp extends AuthService {
@@ -130,10 +132,23 @@ class AuthServiceImp extends AuthService {
   }
 
   @override
-  Future<void> addDeviceToken() async {
-    final _firebaseMessaging = FirebaseMessaging.instance;
+  Future<String> getUserCountry() async {
+    var response =
+        await serviceHelpersImp.post(endPointUrl: 'http://ip-api.com/json');
 
-    await _firebaseMessaging.getToken().then((token) async {
+    response.fold((left) => debugPrint(left.message), (right) async {
+      if (right.data['statusCode'] == 200) {
+        debugPrint(right.data);
+      }
+    });
+    return '';
+  }
+
+  @override
+  Future<void> addDeviceToken() async {
+    final firebaseMessaging = FirebaseMessaging.instance;
+
+    await firebaseMessaging.getToken().then((token) async {
       if (token != null) {
         var response = await serviceHelpersImp.post(
             endPointUrl: 'user/add/device',
